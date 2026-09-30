@@ -655,3 +655,59 @@ article { position: relative; z-index: 1; }
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ─── spread: two facing pages on wide screens ───
+   单栏 780px 在 1440 屏上只用一半宽、页长近 6 屏，而中文一行已到 42 字、不能再拉宽，
+   所以宽屏改成两页对开（与 silicon-hitchhiker / ford 名册同款）：每页一行约 33 字，
+   页高近乎减半。书脊（main::before）正好落进两页之间的订口。
+   联系块 DOM 仍在两页之后（窄屏上照旧收尾），宽屏用网格放进左栏第二行与右页配平。
+   1240 以下合回单栏。 */
+@media (min-width: 1241px) {
+  :root {
+    --sheet:        #f4ecd9;
+    --sheet-edge:   rgba(168, 154, 115, 0.5);
+    --sheet-shadow: 0 1px 2px rgba(74, 60, 43, .05), 0 8px 26px rgba(74, 60, 43, .07);
+  }
+  main { max-width: min(1440px, 92vw); padding: 4rem 0 5rem; }
+  .masthead { margin-bottom: 3rem; }
+  .spread {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    column-gap: 5.5rem;
+    align-items: start;
+  }
+  .spread-page {
+    position: relative;
+    z-index: 1;
+    background: var(--sheet);
+    border: 1px solid var(--sheet-edge);
+    box-shadow: var(--sheet-shadow);
+    padding: 2.8rem 2.6rem 3rem;
+  }
+  .spread > .spread-page:nth-child(1) { grid-column: 1; grid-row: 1; }
+  .spread > .spread-page:nth-child(2) { grid-column: 2; grid-row: 1 / span 2; }
+  .spread > .contact {
+    grid-column: 1; grid-row: 2;
+    align-self: start;
+    position: relative;
+    z-index: 1;
+    margin: 2.2rem 0 0;
+    background: var(--sheet);
+    box-shadow: var(--sheet-shadow);
+  }
+  .spread .panic { margin: 0 0 2.6rem; max-width: none; }
+  .spread-page > .section-divider:first-child { margin-top: 0; }
+  .spread .solve { gap: 0.9rem; }
+  .spread .solve-card { padding: 1.3rem 1.1rem 1.4rem; }
+  /* 田野日志在半页里改成日期压在职位上方，正文拿满整页宽 */
+  .spread .fieldlog::before { left: 0; }
+  .spread .log-entry { flex-direction: column; gap: 0.2rem; }
+  .spread .log-date { width: auto; text-align: left; padding-left: 1.1rem; }
+  .spread .log-entry::before { left: 0; top: 0.5rem; background: var(--sheet); }
+  .spread .log-body { padding-left: 1.1rem; }
+}
+@media (min-width: 1241px) and (max-width: 1360px) {
+  .spread { column-gap: 2.6rem; }
+  .spread-page { padding: 2.2rem 1.7rem 2.4rem; }
+}

@@ -246,7 +246,8 @@
 
     let W = 0, len = 0, stops = [], stacked = false;
     const H = 84, pad = 14;
-    bite.setAttribute('fill', getComputedStyle(root).getPropertyValue('--paper').trim() || '#ede4cf');
+    const cs = getComputedStyle(root);
+    bite.setAttribute('fill', (cs.getPropertyValue('--sheet') || cs.getPropertyValue('--paper')).trim() || '#ede4cf');
     const layout = () => {
       W = svg.clientWidth;
       svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
