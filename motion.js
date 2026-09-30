@@ -106,7 +106,8 @@
 
     const split = () => {
       const t = text.textContent;
-      text.innerHTML = [...t].map(ch => `<span class="pl">${ch}</span>`).join('');
+      // one span per letter, built as nodes: the text never goes back through innerHTML
+      text.replaceChildren(...[...t].map(ch => { const s = make('span', 'pl'); s.textContent = ch; return s; }));
       text.setAttribute('aria-label', t);
     };
     split();
