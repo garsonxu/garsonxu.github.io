@@ -3,6 +3,7 @@
    The dossier is complete without this file: every effect adds,
    none restructures. ?motion=off shows the static page, and
    prefers-reduced-motion is respected.
+   The sky behind the page is sky.js, not this file.
    ═══════════════════════════════════════════════════════════ */
 (() => {
   if (new URLSearchParams(location.search).get('motion') === 'off') return;
@@ -246,8 +247,7 @@
 
     let W = 0, len = 0, stops = [], stacked = false;
     const H = 84, pad = 14;
-    const cs = getComputedStyle(root);
-    bite.setAttribute('fill', (cs.getPropertyValue('--sheet') || cs.getPropertyValue('--paper')).trim() || '#ede4cf');
+    bite.setAttribute('fill', getComputedStyle(root).getPropertyValue('--sheet-solid').trim() || '#0d131e');
     const layout = () => {
       W = svg.clientWidth;
       svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
@@ -265,7 +265,7 @@
     addEventListener('resize', layout);
 
     const P = { x: 0, v: 0, t: 0 };
-    const dawn = [199, 120, 43], noon = [217, 164, 65], dusk = [139, 30, 30], moon = [42, 90, 94];
+    const dawn = [214, 142, 72], noon = [238, 196, 118], dusk = [224, 122, 106], moon = [233, 228, 216];
     const mix = (a, b, t) => a.map((v, i) => Math.round(lerp(v, b[i], t)));
     const rgb = c => `rgb(${c.join(',')})`;
     let spin = 0, counted = false;
@@ -324,7 +324,7 @@
       silo: ['垂类：每个部门一座孤岛，越筑越高', 'vertical: one silo per department, built ever higher'],
       net: ['通用：一个够好的agent，人传人', 'general: one good agent, passed person to person'],
     };
-    const INK = '#3a342b', GHOST = '#a39a82', GILT = '#b88b3a', CRIMSON = '#8b1e1e';
+    const INK = 'rgba(245, 243, 238, .6)', GHOST = '#8b8474', GILT = '#d9ae5f', SEED = '#f5f3ee';
     const FINAL = 2200;
 
     let W = 0, H = 0, dpr = 1, silos = [], dots = [], edges = [], seed = 0, maxInf = 1;
@@ -451,8 +451,13 @@
         ctx.beginPath(); ctx.arc(d.x, d.y, on ? 2.8 : 2.3, 0, 7); ctx.fill();
         ctx.globalAlpha = 1;
         if (net && i === seed) {
-          ctx.fillStyle = CRIMSON; ctx.font = '14px "Cormorant Garamond", serif'; ctx.textAlign = 'center';
-          ctx.fillText('✦', d.x, d.y - 7);
+          // the first one: a four-pointed star, like the brightest stars behind the page
+          ctx.fillStyle = SEED;
+          for (const [rx, ry] of [[1.6, 7], [7, 1.6]]) {
+            ctx.beginPath();
+            ctx.moveTo(d.x, d.y - ry); ctx.lineTo(d.x + rx, d.y); ctx.lineTo(d.x, d.y + ry); ctx.lineTo(d.x - rx, d.y);
+            ctx.closePath(); ctx.fill();
+          }
         }
       });
 
@@ -596,6 +601,13 @@
         const y = u * u * y0 + 2 * u * e2 * cy + e2 * e2 * y1;
         chip.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) scale(${1 - 0.75 * e2}) rotate(${(e2 * -14).toFixed(1)}deg)`;
         chip.style.opacity = t > 0.85 ? String(1 - (t - 0.85) / 0.15) : '1';
+        if (t > 0.08 && t < 0.96) {
+          const dot = make('i', 'trail-dot');
+          dot.style.setProperty('--at', `translate(${x}px, ${y}px)`);
+          dot.style.transform = `translate(${x}px, ${y}px)`;
+          dot.addEventListener('animationend', () => dot.remove());
+          document.body.appendChild(dot);
+        }
         if (t < 1) { requestAnimationFrame(step); return; }
         chip.remove();
         link.classList.remove('gulp'); void link.offsetWidth; link.classList.add('gulp');

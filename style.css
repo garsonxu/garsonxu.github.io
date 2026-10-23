@@ -1,34 +1,48 @@
 /* ═══════════════════════════════════════════════════════════
-   Garson Xu — dossier
-   The Hitchhiker's Guide style: vellum + ink + serif
-   (visual system shared with silicon-hitchhiker / ford)
+   Garson Xu — dossier · starfield
+   The Hitchhiker's Guide style: deep night + brass + white ink
+   (same skin as the entry in silicon-hitchhiker / ford)
+
+   · 色值与ford名册的星野面同一张变量表；
+   · 正文字体用Noto Sans（Google Fonts）—— 名册那边用的品牌字体不随公网页分发；
+   · 星空由同目录sky.js画。
    ═══════════════════════════════════════════════════════════ */
 
 :root {
-  /* aged paper / vellum */
-  --paper:        #ede4cf;
-  --paper-warm:   #e6dabe;
-  --paper-shadow: #c9bb96;
-  --paper-edge:   #a89a73;
+  color-scheme: dark;
 
-  /* ink */
-  --ink:          #1a1612;
-  --ink-soft:     #3a342b;
-  --ink-faint:    #6e6757;
-  --ink-ghost:    #a39a82;
+  /* the night behind everything */
+  --night:        #080d16;
 
-  /* accents */
-  --crimson:      #8b1e1e;     /* emphasis, the rare cinnabar stamp */
-  --gilt:         #b88b3a;     /* old gold, drop-cap accent */
-  --teal:         #2a5a5e;     /* technical metadata */
+  /* the sheet: a page of the Guide floating in that night */
+  --paper:        #0e1420;
+  --paper-warm:   #141c2b;
+  --paper-edge:   #3c4557;
+  --sheet:        rgba(13, 19, 30, 0.94);
+  --sheet-solid:  #0d131e;
+  --sheet-edge:   rgba(150, 170, 205, 0.16);
+  --sheet-shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 34px rgba(0, 0, 0, .34);
+  --tint-box:     rgba(255, 255, 255, 0.05);
+
+  /* ink, flipped for the dark */
+  --ink:          #f5f3ee;
+  --ink-soft:     #d2cbbd;
+  --ink-faint:    #a8a092;
+  --ink-ghost:    #8b8474;
+
+  /* accents — brightened for the dark */
+  --crimson:      #e07a6a;
+  --gilt:         #d9ae5f;
+  --brass:        #c6a15b;
+  --teal:         #7fb2b6;
 
   /* type */
-  --serif-display: 'Cormorant Garamond', 'Crimson Pro', 'EB Garamond', 'Georgia', serif;
-  --serif-body:    'Crimson Pro', 'EB Garamond', 'Georgia', 'Palatino Linotype', serif;
+  --serif-display: 'Cormorant Garamond', 'Noto Serif SC', 'Songti SC', Georgia, serif;
+  --sans:          'Noto Sans', system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
   --mono:          'JetBrains Mono', 'Menlo', 'Consolas', monospace;
   --sans-caps:     'Cormorant SC', 'Cormorant Garamond', serif;
 
-  --max-w:    780px;
+  --max-w:    820px;
 }
 
 /* ─── reset ─── */
@@ -40,76 +54,51 @@
 html { scroll-behavior: smooth; }
 
 body {
-  background: var(--paper);
+  background: var(--night);
   color: var(--ink);
-  font-family: var(--serif-body);
-  font-size: 18px;
-  line-height: 1.65;
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.75;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-
-  background-image:
-    radial-gradient(ellipse at 30% 20%, rgba(184, 139, 58, 0.06), transparent 60%),
-    radial-gradient(ellipse at 80% 90%, rgba(139, 30, 30, 0.04), transparent 60%);
-  background-attachment: fixed;
   min-height: 100vh;
   position: relative;
 }
 
-/* paper grain */
-body::before {
-  content: '';
+/* the sky: fixed, decorative, dimmed where the sheet sits */
+.sky {
   position: fixed;
   inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
   pointer-events: none;
-  z-index: 100;
-  opacity: 0.35;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.18 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  display: block;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, rgba(0,0,0,.34) 26%, rgba(0,0,0,.26) 62%, #000 100%);
+  mask-image: linear-gradient(90deg, #000 0%, rgba(0,0,0,.34) 26%, rgba(0,0,0,.26) 62%, #000 100%);
 }
 
-/* foxing — aged stains */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 99;
-  background-image:
-    radial-gradient(circle at 5% 95%, rgba(139, 100, 50, 0.08), transparent 200px),
-    radial-gradient(circle at 95% 5%, rgba(139, 100, 50, 0.06), transparent 250px),
-    radial-gradient(circle at 90% 70%, rgba(184, 139, 58, 0.05), transparent 180px);
-}
-
-::selection { background: var(--ink); color: var(--paper); }
+::selection { background: var(--gilt); color: var(--night); }
 
 a {
   color: var(--ink);
   text-decoration: none;
-  border-bottom: 1px solid var(--ink-faint);
+  border-bottom: 1px solid var(--ink-ghost);
   transition: color 200ms, border-color 200ms;
 }
-a:hover { color: var(--crimson); border-bottom-color: var(--crimson); }
+a:hover { color: var(--gilt); border-bottom-color: var(--gilt); }
 
-/* ─── layout: book page ─── */
+/* ─── layout: one sheet of the Guide ─── */
 main {
   max-width: var(--max-w);
-  margin: 0 auto;
-  padding: 5rem 2rem 6rem;
+  margin: 4.2rem auto 4rem;
+  padding: 4rem 3.2rem 3rem;
   position: relative;
-}
-
-main::before {
-  content: '';
-  position: absolute;
-  top: 0; bottom: 0; left: 50%;
-  width: 1px;
-  background: linear-gradient(to bottom,
-    transparent 0%, rgba(74, 60, 43, 0.05) 20%,
-    rgba(74, 60, 43, 0.08) 50%, rgba(74, 60, 43, 0.05) 80%, transparent 100%);
-  pointer-events: none;
-  z-index: 0;
+  background: var(--sheet);
+  border: 1px solid var(--sheet-edge);
+  box-shadow: var(--sheet-shadow);
 }
 
 /* ─── masthead ─── */
@@ -118,7 +107,7 @@ main::before {
   margin-bottom: 3.5rem;
   position: relative;
   padding-bottom: 2rem;
-  border-bottom: 1px solid var(--ink-ghost);
+  border-bottom: 1px solid var(--paper-edge);
 }
 .masthead::after {
   content: '';
@@ -126,8 +115,9 @@ main::before {
   left: 50%; bottom: -4px;
   transform: translateX(-50%);
   width: 60px; height: 7px;
-  border-top: 1px solid var(--ink-ghost);
-  border-bottom: 1px solid var(--ink-ghost);
+  border-top: 1px solid var(--paper-edge);
+  border-bottom: 1px solid var(--paper-edge);
+  background: var(--sheet-solid);
 }
 
 .eyebrow {
@@ -145,11 +135,11 @@ main::before {
   font-size: clamp(2.2rem, 6vw, 3.6rem);
   font-weight: 600;
   line-height: 1.05;
-  color: var(--ink);
+  color: #fff;
   margin-bottom: 0.5rem;
   letter-spacing: -0.01em;
 }
-.guide-title .zh-name { font-style: normal; }
+.guide-title .zh-name { font-style: normal; font-family: var(--sans); font-weight: 500; }
 .guide-title .latin { font-style: italic; font-weight: 500; color: var(--ink-soft); }
 
 .guide-subtitle {
@@ -182,7 +172,7 @@ main::before {
   position: relative;
   background: repeating-linear-gradient(45deg,
     transparent, transparent 8px,
-    rgba(139, 30, 30, 0.025) 8px, rgba(139, 30, 30, 0.025) 16px);
+    rgba(224, 122, 106, 0.05) 8px, rgba(224, 122, 106, 0.05) 16px);
 }
 .panic-text {
   font-family: var(--serif-display);
@@ -206,16 +196,15 @@ article { position: relative; z-index: 1; }
 
 .entry-headword {
   font-family: var(--serif-display);
-  font-size: 2.2rem;
+  font-size: 2.3rem;
   font-weight: 600;
-  color: var(--ink);
+  color: #fff;
   margin-bottom: 0.4rem;
   letter-spacing: -0.01em;
   line-height: 1.1;
 }
 .entry-pronunciation {
-  font-family: var(--serif-body);
-  font-size: 0.98rem;
+  font-size: 0.95rem;
   font-style: italic;
   color: var(--ink-faint);
   margin-bottom: 0.4rem;
@@ -248,22 +237,14 @@ article { position: relative; z-index: 1; }
   hyphens: auto;
 }
 .entry-body em { font-style: italic; color: var(--ink); }
-.entry-body strong { font-weight: 600; color: var(--crimson); }
-.entry-body code {
-  font-family: var(--mono);
-  font-size: 0.85em;
-  color: var(--teal);
-  background: rgba(42, 90, 94, 0.07);
-  padding: 0.05em 0.3em;
-  border-radius: 2px;
-}
+.entry-body strong { font-weight: 500; color: var(--crimson); }
 
 .see-also {
   margin-top: 2.2rem;
   padding: 1rem 1.2rem;
-  border-left: 3px solid var(--ink-faint);
-  background: rgba(255, 250, 235, 0.4);
-  font-size: 0.85rem;
+  border-left: 3px solid var(--ink-ghost);
+  background: var(--tint-box);
+  font-size: 0.86rem;
   font-style: italic;
   color: var(--ink-soft);
 }
@@ -276,6 +257,7 @@ article { position: relative; z-index: 1; }
   color: var(--ink-faint);
   margin-right: 0.5rem;
 }
+.see-also a { border-bottom-color: var(--paper-edge); }
 
 /* ─── section divider ─── */
 .section-divider {
@@ -295,7 +277,7 @@ article { position: relative; z-index: 1; }
   top: 50%;
   width: calc(50% - 8rem);
   height: 1px;
-  background: var(--ink-ghost);
+  background: var(--paper-edge);
 }
 .section-divider::before { left: 0; }
 .section-divider::after  { right: 0; }
@@ -307,7 +289,7 @@ article { position: relative; z-index: 1; }
   vertical-align: -2px;
 }
 
-/* ─── what I solve — three cards ─── */
+/* ─── what an FDE does — three cards ─── */
 .solve {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -316,7 +298,7 @@ article { position: relative; z-index: 1; }
 }
 .solve-card {
   padding: 1.5rem 1.4rem 1.6rem;
-  background: rgba(255, 252, 240, 0.5);
+  background: var(--tint-box);
   border: 1px solid var(--paper-edge);
   position: relative;
 }
@@ -328,7 +310,7 @@ article { position: relative; z-index: 1; }
   font-style: italic;
   font-size: 1.4rem;
   color: var(--gilt);
-  opacity: 0.7;
+  opacity: 0.8;
 }
 .solve-pain {
   font-family: var(--mono);
@@ -340,21 +322,21 @@ article { position: relative; z-index: 1; }
 }
 .solve-title {
   font-family: var(--serif-display);
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 600;
-  color: var(--ink);
+  color: #fff;
   line-height: 1.15;
   margin-bottom: 0.6rem;
 }
 .solve-desc {
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   color: var(--ink-soft);
-  line-height: 1.55;
+  line-height: 1.6;
 }
 
 /* ─── method block ─── */
 .method {
-  background: rgba(255, 250, 235, 0.45);
+  background: var(--tint-box);
   border: 1px solid var(--paper-edge);
   border-left: 3px solid var(--gilt);
   padding: 1.8rem 2rem;
@@ -363,14 +345,14 @@ article { position: relative; z-index: 1; }
 .method-lead {
   font-family: var(--serif-display);
   font-style: italic;
-  font-size: 1.3rem;
-  color: var(--ink);
+  font-size: 1.35rem;
+  color: #fff;
   line-height: 1.4;
   margin-bottom: 1rem;
 }
 .method p { margin-bottom: 0.9rem; }
 .method p:last-child { margin-bottom: 0; }
-.method strong { font-weight: 600; color: var(--crimson); }
+.method strong { font-weight: 500; color: var(--crimson); }
 .method .figure {
   font-family: var(--serif-display);
   font-size: 1.6rem;
@@ -379,7 +361,7 @@ article { position: relative; z-index: 1; }
   font-weight: 600;
 }
 
-/* ─── writing list (the dossier's true weapon) ─── */
+/* ─── writing list ─── */
 .writing { list-style: none; }
 .writing li {
   padding: 1.1rem 0;
@@ -400,13 +382,13 @@ article { position: relative; z-index: 1; }
 .writing .w-body { flex: 1; }
 .writing .w-title {
   font-family: var(--serif-display);
-  font-size: 1.18rem;
+  font-size: 1.2rem;
   font-weight: 600;
-  color: var(--ink);
-  line-height: 1.25;
+  color: #fff;
+  line-height: 1.3;
   border-bottom: none;
 }
-.writing a.w-title:hover { color: var(--crimson); }
+.writing a.w-title:hover { color: var(--gilt); }
 .writing .w-meta {
   font-family: var(--mono);
   font-size: 0.66rem;
@@ -415,7 +397,7 @@ article { position: relative; z-index: 1; }
   text-transform: uppercase;
   margin-top: 0.3rem;
 }
-.writing .w-arrow { color: var(--crimson); flex: none; }
+.writing .w-arrow { color: var(--gilt); flex: none; }
 .writing-note {
   margin-top: 1.4rem;
   font-size: 0.88rem;
@@ -438,7 +420,7 @@ article { position: relative; z-index: 1; }
   left: 7.5rem;
   top: 0.5rem; bottom: 0.5rem;
   width: 1px;
-  background: var(--ink-ghost);
+  background: var(--paper-edge);
 }
 .log-entry {
   display: flex;
@@ -456,25 +438,26 @@ article { position: relative; z-index: 1; }
   color: var(--ink-faint);
   padding-top: 0.35rem;
 }
+/* 节点是四芒星 —— 与星空里最亮那几颗同一个形 */
 .log-entry::before {
-  content: '●';
+  content: '✦';
   position: absolute;
   left: 7.5rem;
   transform: translateX(-50%);
-  top: 0.4rem;
+  top: 0.3rem;
   color: var(--gilt);
-  font-size: 0.7rem;
-  background: var(--paper);
+  font-size: 0.8rem;
+  background: var(--sheet-solid);
   line-height: 1;
-  padding: 0.1rem 0;
+  padding: 0.15rem 0;
 }
 .log-body { flex: 1; padding-left: 1rem; }
 .log-role {
   font-family: var(--serif-display);
-  font-size: 1.22rem;
+  font-size: 1.25rem;
   font-weight: 600;
-  color: var(--ink);
-  line-height: 1.2;
+  color: #fff;
+  line-height: 1.25;
 }
 .log-org {
   font-family: var(--mono);
@@ -483,19 +466,19 @@ article { position: relative; z-index: 1; }
   color: var(--teal);
   margin: 0.2rem 0 0.5rem;
 }
-.log-desc { font-size: 0.95rem; color: var(--ink-soft); line-height: 1.55; }
-.log-desc strong { font-weight: 600; color: var(--ink); }
+.log-desc { font-size: 0.92rem; color: var(--ink-soft); line-height: 1.7; }
+.log-desc strong { font-weight: 500; color: var(--ink); }
 
 /* ─── junzi buqi — skills as fine print ─── */
 .buqi {
   margin-top: 2rem;
   padding: 1.6rem 1.8rem;
-  background: rgba(255, 250, 235, 0.4);
+  background: var(--tint-box);
   border: 1px solid var(--paper-edge);
 }
 .buqi-head {
   font-family: var(--serif-display);
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-style: italic;
   color: var(--ink-soft);
   margin-bottom: 0.3rem;
@@ -524,15 +507,15 @@ article { position: relative; z-index: 1; }
   text-align: center;
   margin: 4.5rem 0 2rem;
   padding: 2.6rem 2rem;
-  border-top: 2px solid var(--ink);
-  border-bottom: 2px solid var(--ink);
+  border-top: 1px solid var(--gilt);
+  border-bottom: 1px solid var(--gilt);
   position: relative;
 }
 .contact::before, .contact::after {
   content: '';
   position: absolute;
   left: 50%; width: 80%; height: 1px;
-  background: var(--ink-ghost);
+  background: var(--paper-edge);
   transform: translateX(-50%);
 }
 .contact::before { top: 4px; }
@@ -547,9 +530,9 @@ article { position: relative; z-index: 1; }
 }
 .contact-headline {
   font-family: var(--serif-display);
-  font-size: 1.7rem;
+  font-size: 1.75rem;
   font-style: italic;
-  color: var(--ink);
+  color: #fff;
   margin-bottom: 1.4rem;
 }
 .contact-row {
@@ -561,16 +544,17 @@ article { position: relative; z-index: 1; }
   font-size: 0.82rem;
   color: var(--ink-soft);
 }
-.contact-row a { border-bottom-color: var(--ink-ghost); }
+.contact-row a { border-bottom-color: var(--paper-edge); }
 
 .qr { margin-top: 1.8rem; }
+/* 二维码保持白底黑码 —— 反色码很多扫码器认不出 */
 .qr-img {
   width: 132px;
   height: 132px;
   border: 1px solid var(--paper-edge);
   padding: 6px;
   background: #fff;
-  box-shadow: 0 3px 12px rgba(74, 60, 43, 0.14);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
 }
 .qr-cap {
   margin-top: 0.7rem;
@@ -586,7 +570,7 @@ article { position: relative; z-index: 1; }
 .colophon {
   margin-top: 4rem;
   padding-top: 2rem;
-  border-top: 1px solid var(--ink-ghost);
+  border-top: 1px solid var(--paper-edge);
   font-family: var(--mono);
   font-size: 0.7rem;
   letter-spacing: 0.06em;
@@ -595,8 +579,6 @@ article { position: relative; z-index: 1; }
   line-height: 1.8;
 }
 .colophon-line { display: block; margin: 0.2rem 0; }
-.colophon a { color: var(--ink-faint); border-bottom-color: transparent; }
-.colophon a:hover { color: var(--crimson); }
 
 /* ─── lang toggle ─── */
 .lang-toggle {
@@ -608,12 +590,12 @@ article { position: relative; z-index: 1; }
   letter-spacing: 0.12em;
   text-transform: uppercase;
   background: var(--paper);
-  border: 1px solid var(--ink-faint);
+  border: 1px solid var(--paper-edge);
   padding: 0.4rem 0.8rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
   display: flex;
   gap: 0.3rem;
   align-items: center;
-  box-shadow: 0 2px 6px rgba(74, 60, 43, 0.1);
 }
 .lang-toggle button {
   font: inherit; letter-spacing: inherit;
@@ -622,15 +604,21 @@ article { position: relative; z-index: 1; }
   cursor: pointer;
   padding: 0.1rem 0.3rem;
 }
-.lang-toggle button.active { color: var(--ink); font-weight: 600; }
-.lang-toggle button:hover { color: var(--crimson); }
+.lang-toggle button.active { color: var(--gilt); font-weight: 600; }
+.lang-toggle button:hover { color: var(--gilt); }
 .lang-divider { color: var(--ink-ghost); }
 
 /* ─── responsive ─── */
+@media (max-width: 900px) {
+  main { margin: 4.2rem 1rem 3rem; }
+}
 @media (max-width: 680px) {
-  body { font-size: 17px; }
-  main { padding: 3rem 1.4rem 4rem; }
-  main::before { display: none; }
+  body { font-size: 16px; }
+  main { margin: 3.6rem 0 0; padding: 2.4rem 1.3rem 3rem; border-left: none; border-right: none; }
+  /* 小屏上固定角标会压住正文，改成跟页面一起滚走。body是它的定位祖先，而main的
+     上外边距会穿过body塌出去，角标就跟着落进main里压住刊头；flow-root挡住塌陷 */
+  body { display: flow-root; }
+  .lang-toggle { position: absolute; top: 0.8rem; right: 0.8rem; }
   .solve { grid-template-columns: 1fr; }
   .panic { padding: 1rem 1.4rem; }
   .panic-text { font-size: 1.35rem; }
@@ -638,7 +626,7 @@ article { position: relative; z-index: 1; }
   .fieldlog::before { left: 0; }
   .log-entry { flex-direction: column; gap: 0.2rem; }
   .log-date { width: auto; text-align: left; padding-left: 1rem; }
-  .log-entry::before { left: 0; top: 0.5rem; }
+  .log-entry::before { left: 0; top: 0.35rem; }
   .log-body { padding-left: 1rem; }
 }
 
@@ -656,45 +644,31 @@ article { position: relative; z-index: 1; }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ─── spread: two facing pages on wide screens ───
-   单栏 780px 在 1440 屏上只用一半宽、页长近 6 屏，而中文一行已到 42 字、不能再拉宽，
-   所以宽屏改成两页对开（与 silicon-hitchhiker / ford 名册同款）：每页一行约 33 字，
-   页高近乎减半。书脊（main::before）正好落进两页之间的订口。
-   联系块 DOM 仍在两页之后（窄屏上照旧收尾），宽屏用网格放进左栏第二行与右页配平。
-   1240 以下合回单栏。 */
+/* ─── spread: two facing pages on wide screens（与 ford 名册同款对开）───
+   单栏在 1440 屏上只用 57% 的宽、页长近 6 屏。行长不能再拉（中文一行 42 字已到上限），
+   所以宽屏改成两页对开：每页行长 ~32 字，页高砍半。1240 以下合回单栏。 */
 @media (min-width: 1241px) {
-  :root {
-    --sheet:        #f4ecd9;
-    --sheet-edge:   rgba(168, 154, 115, 0.5);
-    --sheet-shadow: 0 1px 2px rgba(74, 60, 43, .05), 0 8px 26px rgba(74, 60, 43, .07);
+  main {
+    max-width: min(1440px, 92vw);
+    margin: 3.4rem auto 3rem;
+    padding: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
   }
-  main { max-width: min(1440px, 92vw); padding: 4rem 0 5rem; }
   .masthead { margin-bottom: 3rem; }
+  .masthead::after { background: var(--night); }
   .spread {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr;
     column-gap: 5.5rem;
     align-items: start;
   }
   .spread-page {
-    position: relative;
-    z-index: 1;
     background: var(--sheet);
     border: 1px solid var(--sheet-edge);
     box-shadow: var(--sheet-shadow);
     padding: 2.8rem 2.6rem 3rem;
-  }
-  .spread > .spread-page:nth-child(1) { grid-column: 1; grid-row: 1; }
-  .spread > .spread-page:nth-child(2) { grid-column: 2; grid-row: 1 / span 2; }
-  .spread > .contact {
-    grid-column: 1; grid-row: 2;
-    align-self: start;
-    position: relative;
-    z-index: 1;
-    margin: 2.2rem 0 0;
-    background: var(--sheet);
-    box-shadow: var(--sheet-shadow);
   }
   .spread .panic { margin: 0 0 2.6rem; max-width: none; }
   .spread-page > .section-divider:first-child { margin-top: 0; }
@@ -704,8 +678,20 @@ article { position: relative; z-index: 1; }
   .spread .fieldlog::before { left: 0; }
   .spread .log-entry { flex-direction: column; gap: 0.2rem; }
   .spread .log-date { width: auto; text-align: left; padding-left: 1.1rem; }
-  .spread .log-entry::before { left: 0; top: 0.5rem; background: var(--sheet); }
+  .spread .log-entry::before { left: 0; top: 0.35rem; }
   .spread .log-body { padding-left: 1.1rem; }
+  /* 联系块排在左页下面：DOM 仍在两页之后（窄屏上它照旧是收尾），宽屏用网格把它
+     放进左栏第二行 —— 右页跨两行，左页 + 联系块正好跟右页配平 */
+  .spread { grid-template-rows: auto 1fr; }
+  .spread > .spread-page:nth-child(1) { grid-column: 1; grid-row: 1; }
+  .spread > .spread-page:nth-child(2) { grid-column: 2; grid-row: 1 / span 2; }
+  .spread > .contact {
+    grid-column: 1; grid-row: 2;
+    align-self: start;
+    margin: 2.2rem 0 0;
+    background: var(--sheet);
+    box-shadow: var(--sheet-shadow);
+  }
 }
 @media (min-width: 1241px) and (max-width: 1360px) {
   .spread { column-gap: 2.6rem; }

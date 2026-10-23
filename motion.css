@@ -65,7 +65,7 @@
 }
 
 /* ─── 3 · switching language: carbon ⇄ silicon ─── */
-.motion .decoding { color: var(--teal); }
+.motion .decoding { color: var(--gilt); }
 .motion .wash { animation: wash 440ms ease-out backwards; }
 @keyframes wash {
   from { opacity: 0; filter: blur(3px); }
@@ -89,8 +89,8 @@
 .motion .solve-card.lit {
   transform: translateY(-4px);
   border-color: var(--gilt);
-  background-color: rgba(255, 252, 240, .85);
-  box-shadow: 0 10px 20px -14px rgba(74, 60, 43, .55);
+  background-color: rgba(255, 255, 255, .08);
+  box-shadow: 0 12px 24px -14px rgba(0, 0, 0, .7);
 }
 /* card iii — reuse: it leaves copies behind */
 .motion .solve-card[data-no="iii"].lit {
@@ -103,7 +103,7 @@
   height: 6px;
   margin-top: 1rem;
   border: 1px solid var(--paper-edge);
-  background: repeating-linear-gradient(45deg, transparent 0 3px, rgba(139, 30, 30, .18) 3px 5px);
+  background: repeating-linear-gradient(45deg, transparent 0 3px, rgba(224, 122, 106, .3) 3px 5px);
 }
 .motion .meter i {
   position: absolute;
@@ -205,8 +205,8 @@
   pointer-events: none;
   z-index: 5;
   background: var(--paper);
-  border: 1.5px solid var(--ink-soft);
-  box-shadow: 0 12px 26px -10px rgba(26, 22, 18, .5), inset 0 0 0 4px rgba(255, 252, 240, .6);
+  border: 1.5px solid var(--gilt);
+  box-shadow: 0 14px 30px -10px rgba(0, 0, 0, .65), inset 0 0 0 4px rgba(255, 255, 255, .06);
   opacity: 0;
   transform: scale(.3);
   transition: transform 380ms cubic-bezier(.2, .9, .3, 1.35), opacity 200ms;
@@ -218,7 +218,7 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 25%, rgba(255, 255, 255, .35), transparent 45%);
+  background: radial-gradient(circle at 30% 25%, rgba(255, 255, 255, .12), transparent 45%);
 }
 
 /* ─── 8 · hand it off ─── */
@@ -233,23 +233,23 @@
   min-width: 0;
   font: 400 .9rem var(--serif-body);
   color: var(--ink);
-  background: rgba(255, 252, 240, .7);
-  border: 1px solid var(--ink-faint);
+  background: rgba(255, 255, 255, .05);
+  border: 1px solid var(--paper-edge);
   padding: .45rem .7rem;
 }
-.motion .handoff input:focus { outline: none; border-color: var(--crimson); }
+.motion .handoff input:focus { outline: none; border-color: var(--gilt); }
 .motion .handoff button {
   font: 500 .7rem var(--mono);
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--paper);
-  background: var(--ink);
+  color: var(--night);
+  background: var(--gilt);
   border: none;
   padding: .45rem .85rem;
   cursor: pointer;
   transition: background-color 200ms;
 }
-.motion .handoff button:hover { background: var(--crimson); }
+.motion .handoff button:hover { background: #e8c47a; }
 .motion .handoff.shake { animation: shake 380ms; }
 @keyframes shake {
   20% { transform: translateX(-6px); } 40% { transform: translateX(5px); }
@@ -267,9 +267,24 @@
   font: 500 .8rem var(--mono);
   color: var(--ink);
   background: var(--paper);
-  border: 1px solid var(--ink);
+  border: 1px solid var(--gilt);
   padding: .2rem .5rem;
+  box-shadow: 0 0 14px rgba(217, 174, 95, .35);
 }
+/* the chip leaves a meteor trail on its way into the mailbox */
+.motion .trail-dot {
+  position: fixed;
+  left: 0; top: 0;
+  z-index: 199;
+  width: 5px; height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: var(--gilt);
+  box-shadow: 0 0 8px rgba(217, 174, 95, .8);
+  pointer-events: none;
+  animation: trail 520ms ease-out forwards;
+}
+@keyframes trail { to { opacity: 0; transform: var(--at) scale(.2); } }
 .motion .contact-row a { display: inline-block; }
 .motion .contact-row a.gulp { animation: gulp 480ms cubic-bezier(.3, 1.8, .5, 1); }
 @keyframes gulp { 35% { transform: scale(1.18); } 100% { transform: none; } }
